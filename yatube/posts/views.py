@@ -1,13 +1,11 @@
-import datetime
-from django.core.paginator import Paginator
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Post, Group
 from .forms import PostForm
-
+from .models import Group, Post
 
 User = get_user_model()
 
