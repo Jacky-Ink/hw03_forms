@@ -44,7 +44,7 @@ def group_posts(request: HttpRequest, slug) -> HttpResponse:
 def profile(request: HttpRequest, username) -> HttpResponse:
     """Модуль отвечающий за личную страницу"""
     author = get_object_or_404(User, username=username)
-    posts = Post.objects.filter(author=User.objects.get(username=username))
+    posts = Post.objects.filter(author=author)
     posts_count = posts.count()
     paginator = Paginator(posts, SORT_LIMIT)
     page_number = request.GET.get('page')
@@ -72,15 +72,12 @@ def post_detail(request: HttpRequest, post_id: int) -> HttpResponse:
 @login_required
 def post_create(request: HttpRequest) -> HttpResponse:
     """Модуль отвечающий за страницу создания текста постов."""
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('posts:profile', username=request.user.username)
-    else:
-        form = PostForm()
+    form = PostForm(request.POST or None)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.author = request.user
+        post.save()
+        return redirect('posts:profile', username=request.user.username)
     return render(request, 'posts/create_post.html', {'form': form})
 
 

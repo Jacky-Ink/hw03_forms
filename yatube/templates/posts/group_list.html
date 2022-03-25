@@ -10,6 +10,8 @@
         {% for post in page_obj %} 
             <li> 
                 Автор: {{ post.author.get_full_name }} 
+                <a href="{% url 'posts:profile' post.author %}">Все посты пользователя</a>
+                <a href="{% url 'posts:post_detail' post.id %}">Подробная информация</a>
             </li>
             <li>
                 Дата публикации: {{ post.pub_date|date:"d E Y" }} 
